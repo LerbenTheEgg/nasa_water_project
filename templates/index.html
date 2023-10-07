@@ -10,40 +10,42 @@
     body {
       font-family: "Lato", sans-serif;
       margin: 0;
+      overflow: hidden; /* Prevents scroll */
     }
 
     #map {
       height: 100vh;
-      width: 100%;
-      position: absolute; /* Added */
-      transition: width 0.5s, right 0.5s; /* Added right transition */
-      border-right: 3px solid black; /* Added border to the map */
+      width: calc(100% - 6px); /* adjusted to accommodate border */
+      position: absolute;
+      transition: width 0.5s ease-in-out, right 0.5s ease-in-out; /* smoother transition */
+      border-right: 6px solid #2C3E50; /* adjusted border color */
     }
 
     .sidenav {
       height: 100%;
       width: 0;
       position: fixed;
-      z-index: 1;
+      z-index: 2; /* ensure it's on top */
       top: 0;
       right: 0;
-      background-color: #111;
+      background-color: #2C3E50; /* Dark Blue Gray */
       overflow-x: hidden;
-      transition: 0.5s;
-      padding-top: 60px;
+      transition: width 0.5s ease-in-out; /* smoother transition */
+      padding-top: 20px; /* adjusted padding */
+      color: white; /* Text color */
     }
 
-    .sidenav a {
-      padding: 8px 8px 8px 32px;
+    .sidenav a, .sidenav div {
+      padding: 8px 8px 8px 16px;
       text-decoration: none;
       font-size: 25px;
-      color: #818181;
+      color: #ecf0f1; /* Off White */
       display: block;
       transition: 0.3s;
     }
 
     .sidenav a:hover {
-      color: #f1f1f1;
+      color: #bdc3c7; /* Gray */
     }
 
     .sidenav .closebtn {
@@ -52,6 +54,7 @@
       right: 25px;
       font-size: 36px;
       margin-left: 50px;
+      cursor: pointer; /* indicates clickable */
     }
 
     @media screen and (max-height: 450px) {
@@ -63,7 +66,7 @@
 <body>
   <div id="map"></div>
   <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <span class="closebtn" onclick="closeNav()">×</span> <!-- changed to span for better semantics -->
     <div id="markerInfo"></div>
   </div>
 
