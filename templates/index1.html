@@ -17,7 +17,6 @@ body {
   height: 100vh;
   width: 100%;
   position: absolute;
-  transition: width 0.5s ease-in-out, right 0.5s ease-in-out;
 }
 
 .sidenav {
@@ -97,12 +96,12 @@ body {
     <div class="tabcontent-container">
       <div id="tab1" class="tabcontent">
         <h3>Tab 1</h3>
-        <p>Water quality refers to the chemical, physical, and biological characteristics of water that determine its fitness for various uses. Clean and safe water is essential for drinking, agriculture, industry, and ecosystem health. Parameters such as pH, dissolved oxygen, turbidity, and the presence of contaminants like heavy metals or pathogens are key indicators of water quality. Monitoring and maintaining high water quality are critical for preserving human health and the environment, as well as ensuring sustainable access to this precious resource for future generations.</p>
+        <p>Content for Tab 1</p>
       </div>
 
       <div id="tab2" class="tabcontent">
         <h3>Tab 2</h3>
-        <p>The extinction of species is a grave concern for our planet's biodiversity. It occurs when a particular species no longer exists anywhere on Earth. Factors driving extinction include habitat destruction, climate change, pollution, and over-exploitation. The loss of a single species can disrupt ecosystems, affecting other species and even human societies. Conservation efforts, such as habitat restoration, captive breeding, and legal protections, aim to prevent further extinctions and restore balance to our fragile ecosystems. Raising awareness and taking collective action are crucial in the battle against species extinction to preserve the remarkable diversity of life on Earth.</p>
+        <p>Content for Tab 2</p>
       </div>
     </div>
 
@@ -119,9 +118,8 @@ body {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-function openNav(info1, info2) {
-  document.getElementById("tab1").innerHTML = info1; 
-  document.getElementById("tab2").innerHTML = info2;
+function openNav(info) {
+  document.getElementById("tab1").innerHTML = info; 
   document.getElementById("mySidenav").style.width = "300px"; 
   mapContainer.style.width = 'calc(100% - 300px)';
   mapContainer.style.right = '300px';
@@ -131,29 +129,12 @@ function openNav(info1, info2) {
   document.getElementById("defaultOpen").click(); // Ensure this ID matches the ID of your first tab button
 }
 
-function closeNav() {
-  // Get the sidenav element
-  var sidenav = document.getElementById("mySidenav");
-
-  // Set the transition property on the sidenav
-  sidenav.style.transition = "width 0.5s ease-in-out";
-
-  // Start the animation by setting the width to 0
-  sidenav.style.width = "0";
-
-  // Set transition on the map container
-  mapContainer.style.transition = "width 0.5s ease-in-out, right 0.5s ease-in-out";
-
-  // Animate map container back to full width and right 0
-  mapContainer.style.width = '100%';
-  mapContainer.style.right = '0';
-
-  // Invalidate the map size after the animation is complete
-  setTimeout(function() {
-    map.invalidateSize();
-  }, 500); // The timeout duration should match the transition duration you set for the width
-}
-
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+      mapContainer.style.width = '100%';
+      mapContainer.style.right = '0';
+      map.invalidateSize(); 
+    }
 
     fetch('/get_water_bodies')
       .then(response => response.json())
@@ -163,7 +144,7 @@ function closeNav() {
             .addTo(map)
             .bindPopup(waterBody.name)
             .on('click', function() {
-              openNav(`<h2>${waterBody.name}</h2><p>Water quality refers to the chemical, physical, and biological characteristics of water that determine its fitness for various uses. Clean and safe water is essential for drinking, agriculture, industry, and ecosystem health. Parameters such as pH, dissolved oxygen, turbidity, and the presence of contaminants like heavy metals or pathogens are key indicators of water quality. Monitoring and maintaining high water quality are critical for preserving human health and the environment, as well as ensuring sustainable access to this precious resource for future generations.</p>`, `The extinction of species is a grave concern for our planet's biodiversity. It occurs when a particular species no longer exists anywhere on Earth. Factors driving extinction include habitat destruction, climate change, pollution, and over-exploitation. The loss of a single species can disrupt ecosystems, affecting other species and even human societies. Conservation efforts, such as habitat restoration, captive breeding, and legal protections, aim to prevent further extinctions and restore balance to our fragile ecosystems. Raising awareness and taking collective action are crucial in the battle against species extinction to preserve the remarkable diversity of life on Earth.`);
+              openNav(`<h2>${waterBody.name}</h2><p>Sample text for ${waterBody.name}</p>`);
               map.flyTo([waterBody.latitude, waterBody.longitude], 10);
             });
         });
