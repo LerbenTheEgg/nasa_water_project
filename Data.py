@@ -48,7 +48,7 @@ class Data:
         base_url = "http://rajapinnat.ymparisto.fi"
         endpoint = "/api/jarvirajapinta/1.0/odata/Jarvi"
         query_params = {
-            '$select': 'Nimi,KoordErLat,KoordErLong'
+            '$select': 'Nimi,KoordErLat,KoordErLong,Korkeustaso,Rantaviiva,SyvyysKeski,SyvyysSuurin,Tilavuus'
         }
 
         url = base_url + endpoint
@@ -62,14 +62,15 @@ class Data:
 
         results = []
         for item in data.get('value', []):
-            name = item.get('Nimi')
-            latitude = item.get('KoordErLat')
-            print("hdsfbui" + latitude)
-            longitude = item.get('KoordErLong')
             results.append({
-                "name": name,
-                "latitude": latitude,
-                "longitude": longitude
+                "name": item.get('Nimi'),
+                "latitude": item.get('KoordErLat'),
+                "longitude": item.get('KoordErLong'),
+                "elevation": item.get('Korkeustaso'),
+                "shoreline_length": item.get('Rantaviiva'),
+                "average_depth": item.get('SyvyysKeski'),
+                "max_depth": item.get('SyvyysSuurin'),
+                "volume": item.get('Tilavuus')
             })
         
         return results

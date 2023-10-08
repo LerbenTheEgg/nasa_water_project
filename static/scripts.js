@@ -35,12 +35,25 @@ fetch('/get_water_bodies')
         .addTo(map)
         .bindPopup(waterBody.name)
         .on('click', function() {
-          openNav(`<h2>${waterBody.name}</h2><p>Water quality refers to the chemical, physical, and biological characteristics of water... for future generations.</p>`, `The extinction of species... diversity of life on Earth.`);
+          openNav(
+            `
+              <h2>${waterBody.name || 'Data not available'}</h2>
+              ${waterBody.elevation != null ? `<p><strong>Elevation:</strong> ${waterBody.elevation} meters</p>` : ''}
+              ${waterBody.shoreline_length != null ? `<p><strong>Shoreline Length:</strong> ${waterBody.shoreline_length} kilometers</p>` : ''}
+              ${waterBody.average_depth != null ? `<p><strong>Average Depth:</strong> ${waterBody.average_depth} meters</p>` : ''}
+              ${waterBody.max_depth != null ? `<p><strong>Maximum Depth:</strong> ${waterBody.max_depth} meters</p>` : ''}
+              ${waterBody.volume != null ? `<p><strong>Volume:</strong> ${waterBody.volume} cubic kilometers</p>` : ''}
+            `,
+            `The extinction of species and the loss of biodiversity significantly affect the diversity of life on Earth. Biodiversity is crucial for maintaining balanced ecosystems and human survival.`
+          );
           map.flyTo([waterBody.latitude, waterBody.longitude], 10);
         });
     });
   })
   .catch(error => console.error('Error fetching the water bodies:', error));
+
+
+
 
 function openTab(tabName, elmnt) {
   var i, tabcontent, tablinks;
