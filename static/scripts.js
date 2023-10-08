@@ -80,31 +80,51 @@ window.onload = function() {
 };
 
 function searchWaterBodies() {
-    var input = document.getElementById('search-bar').value.toLowerCase();
-    var resultsContainer = document.getElementById('search-results');
-    resultsContainer.innerHTML = ''; // Clear previous results
-    resultsContainer.style.display = 'none'; // Hide results by default
+  var inputElement = document.getElementById('search-bar');
+  var input = inputElement.value.toLowerCase();
+  var resultsContainer = document.getElementById('search-results');
+  resultsContainer.innerHTML = '';
+  resultsContainer.style.display = 'none';
 
-    if (input === '') return; // If the search bar is empty, don't show any results
+  if (input === '') return;
 
-    waterBodies.forEach(function(waterBody) {
-        if (waterBody.name.toLowerCase().includes(input)) {
-            var resultDiv = document.createElement('div');
-            resultDiv.textContent = waterBody.name;
-            resultDiv.onclick = function() {
-                openNavForWaterBody(waterBody);
-            };
-            resultsContainer.appendChild(resultDiv);
-            resultsContainer.style.display = 'block'; // Show results if there are any
-        }
-    });
+  waterBodies.forEach(function(waterBody) {
+      if (waterBody.name.toLowerCase().includes(input)) {
+          var resultDiv = document.createElement('div');
+          resultDiv.textContent = waterBody.name;
+          resultDiv.onclick = function() {
+              // Set the search bar's value to the clicked water body's name
+              inputElement.value = waterBody.name;
+              // Call the 'openNavForWaterBody' function with the clicked 'waterBody'
+              openNavForWaterBody(waterBody);
+              // Hide the results container after a selection is made
+              resultsContainer.style.display = 'none';
+          };
+          resultsContainer.appendChild(resultDiv);
+          resultsContainer.style.display = 'block';
+      }
+  });
 }
 
 function openNavForWaterBody(waterBody) {
-    var info1 = `<h2>${waterBody.name}</h2><p>More details about ${waterBody.name}...</p>`;
-    var info2 = `Latitude: ${waterBody.coords.latitude}, Longitude: ${waterBody.coords.longitude}`;
-    openNav(info1, info2);
-    map.flyTo([parseFloat(waterBody.coords.latitude), parseFloat(waterBody.coords.longitude)], 10);
+  var info1 = `<h2>${waterBody.name}</h2><p>More details about ${waterBody.name}...</p>`;
+  var info2 = `Latitude: ${waterBody.coords.latitude}, Longitude: ${waterBody.coords.longitude}`;
+
+  // Create a marker at the water body's coordinates
+  var marker = L.marker([parseFloat(waterBody.coords.latitude), parseFloat(waterBody.coords.longitude)]).addTo(map);
+
+  // Create a popup and set its content to the water body's name
+  var popup = L.popup().setContent(waterBody.name);
+
+  // Bind the popup to the marker
+  marker.bindPopup(popup);
+
+  // Open the popup
+  marker.openPopup();
+
+  // Open the navigation panel
+  openNav(info1, info2);
+
+  // Zoom to the marker's location
+  map.flyTo([parseFloat(waterBody.coords.latitude), parseFloat(waterBody.coords.longitude)], 10);
 }
-
-
