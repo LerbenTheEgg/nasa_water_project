@@ -1,0 +1,109 @@
+body {
+  font-family: "Lato", sans-serif;
+  margin: 0;
+  overflow: hidden;
+}
+
+#map {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  transition: width 0.5s ease-in-out, right 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  background-color: #2C3E50;
+  overflow-x: hidden;
+  transition: width 0.5s ease-in-out;
+}
+
+.tablink {
+  background-color: #34495e;
+  color: white;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 50%;
+  display: inline-block;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.tablink.active {
+  background-color: #2C3E50;
+}
+
+.tabcontent {
+  color: white;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  padding: 20px;
+  text-align: left;
+  transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
+}
+
+.tab-buttons {
+  width: 100%;
+  display: flex;
+  position: absolute;
+  top: 0;
+}
+
+.tabcontent-container {
+  padding-top: 60px;
+}
+
+.close-button {
+  background-color: #34495e;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+
+
+
+#search-container {
+  position: absolute; /* or relative, depending on your layout */
+  z-index: 1000; /* this value might need to be adjusted */
+  top: 10px; /* adjust as needed */
+  left: 10px; /* adjust as needed */
+}
+
+#search-bar {
+  width: 300px;
+  padding: 10px;
+}
+
+#search-results {
+  position: absolute;
+  width: 300px;
+  background-color: white;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  display: none; /* Hidden by default */
+}
+
+#search-results div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#search-results div:hover {
+  background-color: #ddd;
+}

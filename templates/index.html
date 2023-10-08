@@ -5,88 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Water Information</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
- <style>
-body {
-  font-family: "Lato", sans-serif;
-  margin: 0;
-  overflow: hidden;
-}
-
-#map {
-  height: 100vh;
-  width: 100%;
-  position: absolute;
-  transition: width 0.5s ease-in-out, right 0.5s ease-in-out;
-}
-
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 2; 
-  top: 0;
-  right: 0;
-  background-color: #2C3E50;
-  overflow-x: hidden;
-  transition: width 0.5s ease-in-out;
-}
-
-.tablink {
-  background-color: #34495e;
-  color: white;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  font-size: 17px;
-  width: 50%;
-  display: inline-block;
-  text-align: center;
-  transition: background-color 0.3s; /* transition effect */
-}
-
-.tablink.active {
-  background-color: #2C3E50;
-}
-
-.tabcontent {
-  color: white;
-  /* display: none; */ /* remove this line */
-  opacity: 0; /* add this line */
-  max-height: 0; /* add this line */
-  overflow: hidden; /* add this line */
-  padding: 20px;
-  text-align: left;
-  transition: opacity 0.5s ease-in-out, max-height 0.5s ease-in-out;
-}
-
-.tab-buttons {
-  width: 100%;
-  display: flex;
-  position: absolute;
-  top: 0;
-}
-
-.tabcontent-container {
-  padding-top: 60px;
-}
-
-.close-button {
-  background-color: #34495e;
-  color: white;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-}
-</style>
-
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
+  <div id="search-container">
+    <input type="text" id="search-bar" oninput="searchWaterBodies()" placeholder="Search water bodies...">
+  <div id="search-results"></div>
+  </div>
   <div id="map"></div>
   <div id="mySidenav" class="sidenav">
     <div class="tab-buttons">
@@ -97,12 +22,12 @@ body {
     <div class="tabcontent-container">
       <div id="tab1" class="tabcontent">
         <h3>Tab 1</h3>
-        <p>Water quality refers to the chemical, physical, and biological characteristics of water that determine its fitness for various uses. Clean and safe water is essential for drinking, agriculture, industry, and ecosystem health. Parameters such as pH, dissolved oxygen, turbidity, and the presence of contaminants like heavy metals or pathogens are key indicators of water quality. Monitoring and maintaining high water quality are critical for preserving human health and the environment, as well as ensuring sustainable access to this precious resource for future generations.</p>
+        <p>Water quality refers to ... for future generations.</p>
       </div>
 
       <div id="tab2" class="tabcontent">
         <h3>Tab 2</h3>
-        <p>The extinction of species is a grave concern for our planet's biodiversity. It occurs when a particular species no longer exists anywhere on Earth. Factors driving extinction include habitat destruction, climate change, pollution, and over-exploitation. The loss of a single species can disrupt ecosystems, affecting other species and even human societies. Conservation efforts, such as habitat restoration, captive breeding, and legal protections, aim to prevent further extinctions and restore balance to our fragile ecosystems. Raising awareness and taking collective action are crucial in the battle against species extinction to preserve the remarkable diversity of life on Earth.</p>
+        <p>The extinction of species ... diversity of life on Earth.</p>
       </div>
     </div>
 
@@ -111,89 +36,6 @@ body {
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="{{ url_for('static', filename='water_bodies.js') }}"></script>
-  <script>
-    var mapContainer = document.getElementById('map');
-    var map = L.map('map').setView([51.505, -0.09], 2);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-function openNav(info1, info2) {
-  document.getElementById("tab1").innerHTML = info1; 
-  document.getElementById("tab2").innerHTML = info2;
-  document.getElementById("mySidenav").style.width = "300px"; 
-  mapContainer.style.width = 'calc(100% - 300px)';
-  mapContainer.style.right = '300px';
-  map.invalidateSize(); 
-
-  // Trigger click event on the first tab
-  document.getElementById("defaultOpen").click(); // Ensure this ID matches the ID of your first tab button
-}
-
-function closeNav() {
-  // Get the sidenav element
-  var sidenav = document.getElementById("mySidenav");
-
-  // Set the transition property on the sidenav
-  sidenav.style.transition = "width 0.5s ease-in-out";
-
-  // Start the animation by setting the width to 0
-  sidenav.style.width = "0";
-
-  // Set transition on the map container
-  mapContainer.style.transition = "width 0.5s ease-in-out, right 0.5s ease-in-out";
-
-  // Animate map container back to full width and right 0
-  mapContainer.style.width = '100%';
-  mapContainer.style.right = '0';
-
-  // Invalidate the map size after the animation is complete
-  setTimeout(function() {
-    map.invalidateSize();
-  }, 500); // The timeout duration should match the transition duration you set for the width
-}
-
-
-    fetch('/get_water_bodies')
-      .then(response => response.json())
-      .then(waterBodies => {
-        waterBodies.forEach(function(waterBody) {
-          L.marker([waterBody.latitude, waterBody.longitude])
-            .addTo(map)
-            .bindPopup(waterBody.name)
-            .on('click', function() {
-              openNav(`<h2>${waterBody.name}</h2><p>Water quality refers to the chemical, physical, and biological characteristics of water that determine its fitness for various uses. Clean and safe water is essential for drinking, agriculture, industry, and ecosystem health. Parameters such as pH, dissolved oxygen, turbidity, and the presence of contaminants like heavy metals or pathogens are key indicators of water quality. Monitoring and maintaining high water quality are critical for preserving human health and the environment, as well as ensuring sustainable access to this precious resource for future generations.</p>`, `The extinction of species is a grave concern for our planet's biodiversity. It occurs when a particular species no longer exists anywhere on Earth. Factors driving extinction include habitat destruction, climate change, pollution, and over-exploitation. The loss of a single species can disrupt ecosystems, affecting other species and even human societies. Conservation efforts, such as habitat restoration, captive breeding, and legal protections, aim to prevent further extinctions and restore balance to our fragile ecosystems. Raising awareness and taking collective action are crucial in the battle against species extinction to preserve the remarkable diversity of life on Earth.`);
-              map.flyTo([waterBody.latitude, waterBody.longitude], 10);
-            });
-        });
-      })
-      .catch(error => console.error('Error fetching the water bodies:', error));
-
-  </script>
-
-  <script>
-function openTab(tabName, elmnt) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.opacity = '0';
-    tabcontent[i].style.maxHeight = '0';
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].classList.remove("active");
-  }
-  // Set a brief timeout to allow the fade-out transition to occur before the fade-in
-  setTimeout(function(){
-    document.getElementById(tabName).style.opacity = '1';
-    document.getElementById(tabName).style.maxHeight = '500px'; // or whatever max-height you prefer
-    elmnt.classList.add("active");
-  }, 500); // This timeout duration should match the transition duration on your .tabcontent class
-}
-
-
-
-  </script>
+  <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>

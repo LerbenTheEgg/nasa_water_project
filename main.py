@@ -1,12 +1,16 @@
 from flask import Flask, render_template, jsonify
 import requests
+import json
 from Data import Data
-        
+
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
+    water_bodies = Data.getWaterBodiesCoords3()
+    with open('static/water_bodies.json', 'w') as f:
+        json.dump(water_bodies, f)
     return render_template("index.html")
 
 @app.route("/get_water_bodies")
