@@ -6,28 +6,69 @@
   <title>Water Information</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <style>
+    /* Style for the "Read More" button */
+    #read-more-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000; /* Set a high z-index to keep it above other elements */
+    }
+
+    /* Style for the pop-up message */
+    #popup {
+      display: none;
+      position: fixed;
+      bottom: 60px;
+      left: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000; /* Ensure it appears above other elements */
+    }
+
+    /* Rest of your CSS */
+  </style>
 </head>
 <body>
   <div id="search-container">
     <input type="text" id="search-bar" oninput="searchWaterBodies()" placeholder="Search water bodies..." style="margin-left: 40px;">
     <div id="search-results"></div>
-</div>
   </div>
+
+  <!-- "Read More" button -->
+  <button id="read-more-button" onclick="showPopup()">Read This</button>
+
+  <!-- Pop-up message -->
+  <div id="popup">
+   <p> <a href="https://www.dfo-mpo.gc.ca/pnw-ppe/contact-eng.html"> If you observe improper conduct by the water, please report it by clicking on this text </a> </p>
+    <p> Please, do not litter in water bodies </p>
+    <button onclick="hidePopup()">Close</button>
+  </div>
+
   <div id="map"></div>
   <div id="mySidenav" class="sidenav">
     <div class="tab-buttons">
-      <button class="tablink" onclick="openTab('tab1', this)" id="defaultOpen">Tab 1</button>
-      <button class="tablink" onclick="openTab('tab2', this)">Tab 2</button>
+      <button class="tablink" onclick="openTab('tab1', this)" id="defaultOpen">Water</button>
+      <button class="tablink" onclick="openTab('tab2', this)">Inhabitance</button>
     </div>
 
     <div class="tabcontent-container">
       <div id="tab1" class="tabcontent">
-        <h3>Tab 1</h3>
+        <h3>Water</h3>
         <p>Water quality refers to ... for future generations.</p>
       </div>
 
       <div id="tab2" class="tabcontent">
-        <h3>Tab 2</h3>
+        <h3>Inhabitance</h3>
         <p>The extinction of species ... diversity of life on Earth.</p>
       </div>
     </div>
@@ -38,5 +79,19 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="{{ url_for('static', filename='water_bodies.js') }}"></script>
   <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+
+  <script>
+    // Function to show the pop-up message
+    function showPopup() {
+      document.getElementById('popup').style.display = 'block';
+    }
+
+    // Function to hide the pop-up message
+    function hidePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+  </script>
 </body>
 </html>
+

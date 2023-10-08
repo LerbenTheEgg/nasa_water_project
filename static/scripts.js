@@ -52,7 +52,58 @@ fetch('/get_water_bodies')
   })
   .catch(error => console.error('Error fetching the water bodies:', error));
 
+  L.marker([53.6444, 21.8083])
+  .addTo(map)
+  .bindPopup("Lake Sniardwy")
+  .on('click', function() {
+    openNav(
+      // Create a custom popup content
+      `
+      <p><b>Area:</b> 2,400 square kilometers</p>
+      <p><b>Depth:</b> Average: 3.5m, Max: 14m</p>
+      <p><b>Temperature:</b> 18-22°C</p>
+      <p><b>Water Quality:</b> &#9989; </p>
 
+          <p> The entire region around Lake Sniardwy was shaped during the last glaciation, which occurred approximately 12,000 years ago. </p>
+          `
+          ,
+          `   
+          <p>
+          The lake's fauna includes fish species like pike, perch, eel, and others. It also attracts various bird species, making it a popular spot for birdwatching.
+        </p>
+        <p>
+          The flora around Lake Sniardwy consists of aquatic plants, reeds, and other vegetation that provide important habitats for the lake's wildlife.
+        </p>
+        <p>
+          Lake Sniardwy occupies a central position within the Masurian Landscape Protective Area, designated to conserve the postglacial terrain, forests, swamps featuring boreal and subarctic vegetation, and numerous lakes and pools. Within this Protective Area, several reserves protect rare plant species and old-growth forests. Additionally, waterfowl reserves like Lake Luknajno biosphere reserve are present, home to colonies of mute swans. 
+        </p>
+      `
+    );
+    map.flyTo([53.6444, 21.8083], 10);
+      // Create a custom popup and open it
+   //   var customPopup = L.popup().setContent(popupContent);
+   //   this.bindPopup(customPopup).openPopup();
+  });
+
+
+
+
+  waterBodies.forEach(function(waterBody) {
+    if (waterBody.name.toLowerCase().includes(input)) {
+        var resultDiv = document.createElement('div');
+        resultDiv.textContent = waterBody.name;
+        resultDiv.onclick = function() {
+            // Set the search bar's value to the clicked water body's name
+            inputElement.value = waterBody.name;
+            // Call the 'openNavForWaterBody' function with the clicked 'waterBody'
+            openNavForWaterBody(waterBody);
+            // Hide the results container after a selection is made
+            resultsContainer.style.display = 'none';
+        };
+        resultsContainer.appendChild(resultDiv);
+        resultsContainer.style.display = 'block';
+    }
+});
 
 
 function openTab(tabName, elmnt) {
@@ -101,22 +152,7 @@ function searchWaterBodies() {
 
   if (input === '') return;
 
-  waterBodies.forEach(function(waterBody) {
-      if (waterBody.name.toLowerCase().includes(input)) {
-          var resultDiv = document.createElement('div');
-          resultDiv.textContent = waterBody.name;
-          resultDiv.onclick = function() {
-              // Set the search bar's value to the clicked water body's name
-              inputElement.value = waterBody.name;
-              // Call the 'openNavForWaterBody' function with the clicked 'waterBody'
-              openNavForWaterBody(waterBody);
-              // Hide the results container after a selection is made
-              resultsContainer.style.display = 'none';
-          };
-          resultsContainer.appendChild(resultDiv);
-          resultsContainer.style.display = 'block';
-      }
-  });
+  
 }
 
 function openNavForWaterBody(waterBody) {
